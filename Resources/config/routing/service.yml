@@ -1,0 +1,44 @@
+fnc_account_service_create:
+    path:     /create/
+    defaults: { _controller: FNCAccountBundle:Service:create }
+    methods:  [POST]
+
+fnc_account_service_balance:
+    path:     /balance/{number}/
+    defaults: { _controller: FNCAccountBundle:Service:balance }
+    methods:  [POST]
+
+fnc_account_service_status:
+    path:     /status/{number}/
+    defaults: { _controller: FNCAccountBundle:Service:status }
+    methods:  [POST]
+
+fnc_account_service_redeem:
+    path:     /redeem/{number}/
+    defaults: { _controller: FNCAccountBundle:Service:redeem }
+    methods:  [POST]
+
+fnc_account_service_load:
+    path:     /load/{number}/
+    defaults: { _controller: FNCAccountBundle:Service:load }
+    methods:  [POST]
+
+fnc_account_service_cancel:
+    path:     /cancel/{number}/
+    defaults: { _controller: FNCAccountBundle:Service:cancel }
+    methods:  [POST]
+
+fnc_account_service_activate:
+    path:     /activate/{number}/
+    defaults: { _controller: FNCAccountBundle:Service:activate }
+    methods:  [POST]
+
+fnc_account_service_info:
+    path:     /info/{number}/
+    defaults: { _controller: FNCAccountBundle:Service:info }
+    methods:  [POST]
+
+fnc_account_service_history:
+    path:     /history/{number}/
+    defaults: { _controller: FNCAccountBundle:Service:history }
+    methods:  [POST]

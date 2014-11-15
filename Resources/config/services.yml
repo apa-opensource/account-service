@@ -1,0 +1,56 @@
+parameters:
+    fnc_account.paramconverter.account_number_converter.class: FNC\AccountBundle\Request\ParamConverter\AccountNumberConverter
+
+    fnc_account.generator.class: FNC\AccountBundle\Generator\Generator
+    fnc_account.service.class: FNC\AccountBundle\Service\Service
+
+    fnc_account.converter.history.class: FNC\AccountBundle\Converter\HistoryConverter
+    fnc_account.converter.account.class: FNC\AccountBundle\Converter\AccountConverter
+    fnc_account.converter.chain.class: FNC\AccountBundle\Converter\ConverterChain
+
+    fnc_account.exception_listener.class: FNC\AccountBundle\EventListener\ExceptionListener
+
+services:
+#    fnc_account.example:
+#        class: FNC\AccountBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]
+    fnc_account.account_number_converter:
+        class:        %fnc_account.paramconverter.account_number_converter.class%
+        arguments:    [ @doctrine.orm.default_entity_manager]
+        tags:
+            - { name: request.param_converter, priority: 100, converter: account_number_connverter }
+
+    fnc_account.account_number_generator:
+        class:        %fnc_account.generator.class%
+
+    fnc_account.service:
+        class:        %fnc_account.service.class%
+        arguments:
+            - @doctrine.orm.default_entity_manager
+            - @fnc_account.account_number_generator
+            - %fnc_account.types%
+            - %fnc_account.currencies%
+            - @logger
+        tags:
+            - { name: monolog.logger, channel: account }
+
+    fnc_account.converter.history:
+        class:        %fnc_account.converter.history.class%
+        public:       false
+
+    fnc_account.converter.account:
+        class:        %fnc_account.converter.account.class%
+        public:       false
+
+    fnc_account.converter_chain:
+        class:        %fnc_account.converter.chain.class%
+        arguments:
+            - [@fnc_account.converter.history, @fnc_account.converter.account]
+
+    fnc_account.exception_listener:
+        class:        %fnc_account.exception_listener.class%
+        arguments:
+            - @logger
+        tags:
+            - { name: kernel.event_subscriber }
+            - { name: monolog.logger, channel: account }

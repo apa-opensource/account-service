@@ -1,0 +1,7 @@
+fnc_account_management_account:
+    resource: "@FNCAccountBundle/Resources/config/routing/account.yml"
+    prefix:   /management/account
+
+fnc_account_service:
+    resource: "@FNCAccountBundle/Resources/config/routing/service.yml"
+    prefix:   /service
