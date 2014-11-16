@@ -15,6 +15,11 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 class ServiceController extends Controller
 {
     /**
+     * @var string
+     */
+    const ERR_SERVICE_NEGATIVE_AMOUNT = 1416101130;
+
+    /**
      * Redeem Account.
      *
      * @param Request $request
@@ -91,7 +96,7 @@ class ServiceController extends Controller
         $transactionCode  = $request->get('transactionCode');
 
         if($amount < 0) {
-            throw new \Exception('Positive Amount required');
+            throw new \Exception('Positive Amount required', self::ERR_SERVICE_NEGATIVE_AMOUNT);
         }
 
         /* @var Service $service*/
@@ -123,7 +128,7 @@ class ServiceController extends Controller
         $transactionCode  = $request->get('transactionCode');
 
         if($amount < 0) {
-            throw new \Exception('Positive Amount required');
+            throw new \Exception('Positive Amount required', self::ERR_SERVICE_NEGATIVE_AMOUNT);
         }
 
         /* @var Service $service*/

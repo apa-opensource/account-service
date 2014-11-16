@@ -1,315 +1,291 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: ceilers
+ * Date: 16.11.14
+ * Time: 01:32
+ */
 
 namespace FNC\AccountBundle\Tests\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
-use Symfony\Component\HttpKernel\Kernel;
 
-class ServiceControllerTest extends WebTestCase
+use FNC\AccountBundle\Controller\ServiceController;
+use FNC\AccountBundle\Entity\Account;
+use Symfony\Component\HttpFoundation\JsonResponse;
+
+class ServiceControllerTest extends \PHPUnit_Framework_TestCase
 {
     /**
      * @string
      */
-    const ACCOUNT_NUMBER = '1234-5678-9123-4577';
+    const ACCOUNT_DEFAULT = '200000';
 
     /**
      * @string
      */
-    const ACCOUNT_PIN = '123';
+    const ACCOUNT_EXISTS = '100000';
 
     /**
      * @string
      */
-    const ACCOUNT_CURRENCY = 'CREDIT';
+    const ACCOUNT_TRANSACTION = '300000';
 
     /**
      * @string
      */
-    const ACCOUNT_TYPE_TEST = 'CREDIT';
+    const ACCOUNT_GENERATE_ID = '400000';
 
     /**
-     * @integer
+     * @string
      */
-    const ACCOUNT_BALANCE = 100;
+    const ACCOUNT_TRANSACTION_AMOUNT = '200';
 
-    protected $em;
+    /**
+     * @string
+     */
+    const CURRENCY_DEFAULT = 'CREDIT';
+
+    /**
+     * @string
+     */
+    const CURRENCY_INVALID = 'INVALID';
+
+    /**
+     * @string
+     */
+    const TYPE_DEFAULT = 'CREDIT';
+
+    /**
+     * @string
+     */
+    const TYPE_INVALID = 'INVALID';
+
+    /**
+     * @var ServiceController
+     */
+    public $controller;
 
     public function setUp()
     {
-        static::$kernel = static::createKernel();
-        static::$kernel->boot();
-
-        $this->em = static::$kernel->getContainer()
-            ->get('doctrine')
-            ->getManager();
-
-        $repository = $this->em->getRepository('FNCAccountBundle:Account');
-
-        /* @var Account $account*/
-        foreach ($repository->findAll() as $account) {
-            if ($account->getType() != self::ACCOUNT_TYPE_TEST) {
-                continue;
-            }
-            foreach ($account->getHistory() as $history) {
-                $this->em->remove($history);
-            }
-
-            $this->em->remove($account);
-        }
-
-        $this->em->flush();
+        $this->controller = new ServiceController();
+        $this->controller->setContainer($this->getContainerMock());
     }
 
     public function testCreate()
     {
-        $client = static::createClient();
-
-        $crawler = $client->request('POST', '/service/create/', array(
-            'amount'            => self::ACCOUNT_BALANCE,
-            'currency'          => self::ACCOUNT_CURRENCY,
-            'type'              => self::ACCOUNT_TYPE_TEST,
-            'referenceCode'     => 1000000,
-            'transactionCode'   => microtime()
+        $request = $this->getRequestMock(array(
+            'amount'    => -100,
+            'currency'  => ServiceControllerTest::CURRENCY_DEFAULT,
+            'type'      => ServiceControllerTest::TYPE_DEFAULT,
+            'number'    => ServiceControllerTest::ACCOUNT_DEFAULT
         ));
 
-        $content = $client->getResponse()->getContent();
+        /* @var JsonResponse */
+        $jsonRespone = $this->controller->createAction($request);
 
-        $this->assertTrue(
-            json_decode($content) !== null,
-            sprintf('Unexcepted Return Value: %2', $content));
+        $object = json_decode($jsonRespone->getContent());
 
-        $this->assertTrue(
-            $client->getResponse()->getStatusCode() === 200,
-            sprintf('Returned Status Code: %s - %s', $client->getResponse()->getStatusCode(), $content));
-    }
-
-    public function testCreateWithNumber()
-    {
-        $client = static::createClient();
-
-        $crawler = $client->request('POST', '/service/create/', array(
-            'amount'            => self::ACCOUNT_BALANCE,
-            'number'            => self::ACCOUNT_NUMBER,
-            'currency'          => self::ACCOUNT_CURRENCY,
-            'type'              => self::ACCOUNT_TYPE_TEST,
-            'referenceCode'     => 1000000,
-            'transactionCode'   => microtime()
-        ));
-
-        $content = $client->getResponse()->getContent();
-
-        $object = json_decode($content);
-
-        $this->assertTrue(
-            $object !== null,
-            sprintf('Unexcepted Return Value: %2', $content));
-
-        $this->assertTrue(
-            $client->getResponse()->getStatusCode() === 200,
-            sprintf('Returned Status Code: %s - %s', $client->getResponse()->getStatusCode(), $content));
-    }
-
-    public function testRedeem()
-    {
-        $this->testCreateWithNumber();
-
-        $url = sprintf('/service/redeem/%s/',self::ACCOUNT_NUMBER);
-
-        $client = static::createClient();
-
-        $i = microtime();
-
-        $crawler = $client->request('POST', $url, array(
-            'pin'               =>  self::ACCOUNT_PIN,
-            'amount'            => '110',
-            'currency'          => self::ACCOUNT_CURRENCY,
-            'referenceCode'     => 1000,
-            'transactionCode'   => $i
-        ));
-
-        $content = $client->getResponse()->getContent();
-
-        $object = json_decode($content);
-
-        $this->assertTrue(
-            property_exists($object, 'rest') && $object->rest == 10, 'Incorrect rest');
-
-        $this->assertTrue(
-            $object !== null,
-            sprintf('Unexcepted Return Value: %2', $content));
-
-        $this->assertTrue(
-            $client->getResponse()->getStatusCode() === 200,
-            sprintf('Returned Status Code: %s - %s', $client->getResponse()->getStatusCode(), $content));
+        $this->assertEquals(ServiceControllerTest::ACCOUNT_DEFAULT, $object->number);
     }
 
     public function testLoad()
     {
-        $this->testCreateWithNumber();
+        $account = new Account();
+        $account->setBalance(100);
 
-        $url = sprintf('/service/load/%s/',self::ACCOUNT_NUMBER);
-
-        $client = static::createClient();
-
-        $crawler = $client->request('POST', $url, array(
-            'pin'               =>  self::ACCOUNT_PIN,
-            'amount'            => '100',
-            'currency'          => self::ACCOUNT_CURRENCY,
-            'referenceCode'     => 1000,
-            'transactionCode'   => microtime()
+        $request = $this->getRequestMock(array(
+            'amount'    => 100,
+            'currency'  => ServiceControllerTest::CURRENCY_DEFAULT,
+            'type'      => ServiceControllerTest::TYPE_DEFAULT,
+            'number'    => ServiceControllerTest::ACCOUNT_DEFAULT
         ));
 
-        $content = $client->getResponse()->getContent();
+        $jsonRespone = $this->controller->loadAction($request, $account);
 
-        $object = json_decode($content);
+        $object = json_decode($jsonRespone->getContent());
 
-        $this->assertTrue(
-            property_exists($object, 'balance') && $object->balance == 200, 'Incorrect Balance');
-
-        $this->assertTrue(
-            $object !== null,
-            sprintf('Unexcepted Return Value: %2', $content));
-
-        $this->assertTrue(
-            $client->getResponse()->getStatusCode() === 200,
-            sprintf('Returned Status Code: %s - %s', $client->getResponse()->getStatusCode(), $content));
+        $this->assertEquals(100, $object->balance);
     }
 
-    public function testBalance()
+    /**
+     * @expectedException       \Exception
+     * @expectedExceptionCode   FNC\AccountBundle\Controller\ServiceController::ERR_SERVICE_NEGATIVE_AMOUNT
+     */
+    public function testLoadNegativeAmount()
     {
-        $this->testCreateWithNumber();
+        $account = new Account();
+        $account->setBalance(100);
 
-        $url = sprintf('/service/balance/%s/',self::ACCOUNT_NUMBER);
-
-        $client = static::createClient();
-
-        $crawler = $client->request('POST', $url, array(
-            'pin'   => self::ACCOUNT_PIN
+        $request = $this->getRequestMock(array(
+            'amount'    => -100,
+            'currency'  => ServiceControllerTest::CURRENCY_DEFAULT,
+            'type'      => ServiceControllerTest::TYPE_DEFAULT,
+            'number'    => ServiceControllerTest::ACCOUNT_DEFAULT
         ));
 
-        $content = $client->getResponse()->getContent();
+        $jsonRespone = $this->controller->loadAction($request, $account);
 
-        $this->assertTrue(
-            json_decode($content) !== null,
-            sprintf('Unexcepted Return Value: %2', $content));
+        $object = json_decode($jsonRespone->getContent());
 
-        $this->assertTrue(
-            $client->getResponse()->getStatusCode() === 200,
-            sprintf('Returned Status Code: %s - %s', $client->getResponse()->getStatusCode(), $content));
+        $this->assertEquals(100, $object->balance);
     }
 
-    public function testStatus()
+    public function testRedeem()
     {
-        $this->testCreateWithNumber();
-
-        $url = sprintf('/service/status/%s/',self::ACCOUNT_NUMBER);
-
-        $client = static::createClient();
-
-        $crawler = $client->request('POST', $url, array(
-            'pin'   => self::ACCOUNT_PIN
+        $request = $this->getRequestMock(array(
+            'amount'    => 100,
+            'currency'  => ServiceControllerTest::CURRENCY_DEFAULT,
+            'type'      => ServiceControllerTest::TYPE_DEFAULT,
+            'number'    => ServiceControllerTest::ACCOUNT_DEFAULT
         ));
 
-        $content = $client->getResponse()->getContent();
+        $jsonRespone = $this->controller->redeemAction($request, new Account());
 
-        $this->assertTrue(
-            json_decode($content) !== null,
-            sprintf('Unexcepted Return Value: %2', $content));
+        $object = json_decode($jsonRespone->getContent());
 
-        $this->assertTrue(
-            $client->getResponse()->getStatusCode() === 200,
-            sprintf('Returned Status Code: %s - %s', $client->getResponse()->getStatusCode(), $content));
+        $this->assertEquals(0, $object->rest);
     }
 
-    public function testInfo()
+    /**
+     * @expectedException       \Exception
+     * @expectedExceptionCode   FNC\AccountBundle\Controller\ServiceController::ERR_SERVICE_NEGATIVE_AMOUNT
+     */
+    public function testRedeemNegativeAmount()
     {
-        $this->testCreateWithNumber();
-
-        $url = sprintf('/service/info/%s/',self::ACCOUNT_NUMBER);
-
-        $client = static::createClient();
-
-        $crawler = $client->request('POST', $url, array(
-            'pin'   => self::ACCOUNT_PIN
+        $request = $this->getRequestMock(array(
+            'amount'    => -100,
+            'currency'  => ServiceControllerTest::CURRENCY_DEFAULT,
+            'type'      => ServiceControllerTest::TYPE_DEFAULT,
+            'number'    => ServiceControllerTest::ACCOUNT_DEFAULT
         ));
 
-        $content = $client->getResponse()->getContent();
+        $jsonRespone = $this->controller->redeemAction($request, new Account());
 
-        $this->assertTrue(
-            json_decode($content) !== null,
-            sprintf('Unexcepted Return Value: %2', $content));
+        $object = json_decode($jsonRespone->getContent());
 
-        $this->assertTrue(
-            $client->getResponse()->getStatusCode() === 200,
-            sprintf('Returned Status Code: %s - %s', $client->getResponse()->getStatusCode(), $content));
-    }
-
-    public function testHistory()
-    {
-        $this->testCreateWithNumber();
-
-        $url = sprintf('/service/history/%s/',self::ACCOUNT_NUMBER);
-
-        $client = static::createClient();
-
-        $crawler = $client->request('POST', $url, array(
-            'pin'   => self::ACCOUNT_PIN
-        ));
-
-        $content = $client->getResponse()->getContent();
-
-        $this->assertTrue(
-            json_decode($content) !== null,
-            sprintf('Unexcepted Return Value: %2', $content));
-
-        $this->assertTrue(
-            $client->getResponse()->getStatusCode() === 200,
-            sprintf('Returned Status Code: %s - %s', $client->getResponse()->getStatusCode(), $content));
+        $this->assertEquals(0, $object->rest);
     }
 
     public function testCancel()
     {
-        $this->testCreateWithNumber();
+        $jsonRespone = $this->controller->cancelAction(new Account());
 
-        $url = sprintf('/service/cancel/%s/',self::ACCOUNT_NUMBER);
+        $object = json_decode($jsonRespone->getContent());
 
-        $client = static::createClient();
-
-        $crawler = $client->request('POST', $url, array(
-            'pin'   => self::ACCOUNT_PIN
-        ));
-
-        $content = $client->getResponse()->getContent();
-
-        $this->assertTrue(
-            json_decode($content) !== null,
-            sprintf('Unexcepted Return Value: %2', $content));
-
-        $this->assertTrue(
-            $client->getResponse()->getStatusCode() === 200,
-            sprintf('Returned Status Code: %s - %s', $client->getResponse()->getStatusCode(), $content));
+        $this->assertEquals(true, $object->disabled);
     }
 
     public function testActivate()
     {
-        $this->testCreateWithNumber();
+        $jsonRespone = $this->controller->activateAction(new Account());
 
-        $url = sprintf('/service/activate/%s/',self::ACCOUNT_NUMBER);
+        $object = json_decode($jsonRespone->getContent());
 
-        $client = static::createClient();
-
-        $crawler = $client->request('POST', $url, array(
-            'pin'   => self::ACCOUNT_PIN
-        ));
-
-        $content = $client->getResponse()->getContent();
-
-        $this->assertTrue(
-            json_decode($content) !== null,
-            sprintf('Unexcepted Return Value: %2', $content));
-
-        $this->assertTrue(
-            $client->getResponse()->getStatusCode() === 200,
-            sprintf('Returned Status Code: %s - %s', $client->getResponse()->getStatusCode(), $content));
+        $this->assertEquals(false, $object->disabled);
     }
-}
+
+    public function testStatus()
+    {
+        $jsonRespone = $this->controller->statusAction(new Account());
+
+        $object = json_decode($jsonRespone->getContent());
+
+        $this->assertTrue(property_exists($object, 'disabled'));
+    }
+
+    public function testBalance()
+    {
+        $account = new Account();
+
+        $account
+            ->setBalance(200)
+            ->setCurrency(self::CURRENCY_DEFAULT);
+
+        $jsonRespone = $this->controller->balanceAction($account);
+
+        $object = json_decode($jsonRespone->getContent());
+
+        $this->assertEquals(200, $object->balance);
+        $this->assertEquals(self::CURRENCY_DEFAULT, $object->currency);
+    }
+
+    public function getRequestMock(array $parameters)
+    {
+        $request = $this->getMock('Symfony\\Component\\HttpFoundation\\Request');
+        $headers = $this->getMock('Symfony\\Component\\HttpFoundation\\ParameterBag');
+        $request->request->headers = $headers;
+
+        $request
+            ->expects($this->any())
+            ->method('get')
+            ->willReturnCallback(function($key) use ($parameters) {
+                if(isset($parameters[$key])) {
+                    return $parameters[$key];
+                }
+                return null;
+            });
+
+        return $request;
+    }
+
+    public function getContainerMock()
+    {
+        $self = $this;
+
+        $mock = $this->getMockBuilder('Symfony\Component\DependencyInjection\ContainerInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $mock
+            ->expects($this->any())
+            ->method('get')
+            ->willReturnCallback(function($name) use ($self) {
+                if($name === 'fnc_account.service') {
+                    return $self->getServiceMock();
+                }
+
+                if($name === 'fnc_account.converter_chain') {
+
+                }
+            });
+
+        return $mock;
+    }
+
+    public function getServiceMock()
+    {
+        $mock = $this->getMockBuilder('FNC\AccountBundle\Service\Service')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $mock
+            ->expects($this->any())
+            ->method('create')
+            ->willReturnCallback(function($amount, $currency, $referenceCode, $referenceMessage, $transactionCode, $type, $pin, $number)  {
+                $account = new Account();
+
+                $account->setBalance($amount);
+                $account->setCurrency($currency);
+                $account->setType($type);
+                $account->setPin($pin);
+                $account->setNumber($number);
+
+                return $account;
+            });
+
+        $mock
+            ->method('booking')
+            ->willReturnCallback(function($account, $amount, $currency, $referenceCode, $referenceMessage, $transactionCode) {
+               return 0;
+            });
+
+        $mock
+            ->method('cancel')
+            ->willReturnCallback(function(Account $account) {
+                $account->setDisabled(true);
+            });
+
+
+        return $mock;
+    }
+} 
