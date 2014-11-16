@@ -22,14 +22,14 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-                ->arrayNode('types')
-                    ->prototype('scalar')->end()
-                    ->isRequired()
-                ->end()
-                ->arrayNode('currencies')
-                    ->prototype('scalar')->end()
-                    ->isRequired()
-                ->end()
+            ->arrayNode('types')
+            ->prototype('scalar')->end()
+            ->isRequired()
+            ->end()
+            ->arrayNode('currencies')
+            ->prototype('scalar')->end()
+            ->isRequired()
+            ->end()
             ->end();
 
         // Here you should define the parameters that are allowed to

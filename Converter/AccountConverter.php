@@ -22,12 +22,12 @@ class AccountConverter implements ConverterInterface
         /* @var Account $object */
 
         return array(
-            'number'    => $object->getNumber(),
-            'pin'       => $object->getPin(),
-            'balance'   => $object->getBalance(),
-            'currency'  => $object->getCurrency(),
-            'disabled'  => $object->isDisabled(),
-            'type'      => $object->getType()
+            'number' => $object->getNumber(),
+            'pin' => $object->getPin(),
+            'balance' => $object->getBalance(),
+            'currency' => $object->getCurrency(),
+            'disabled' => $object->isDisabled(),
+            'type' => $object->getType()
         );
     }
 }

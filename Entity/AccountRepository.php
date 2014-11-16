@@ -12,6 +12,10 @@ use Doctrine\ORM\EntityRepository;
  */
 class AccountRepository extends EntityRepository
 {
+    /**
+     * @param $number
+     * @return Account
+     */
     public function findOneByNumber($number)
     {
         return $this->findOneBy(array('number' => $number));

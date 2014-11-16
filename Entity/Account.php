@@ -163,7 +163,7 @@ class Account
     /**
      * Set pin
      *
-     * @param  string  $pin
+     * @param  string $pin
      * @return Account
      */
     public function setPin($pin)
@@ -186,7 +186,7 @@ class Account
     /**
      * Set currency
      *
-     * @param  string  $currency
+     * @param  string $currency
      * @return Account
      */
     public function setCurrency($currency)
@@ -232,7 +232,7 @@ class Account
     /**
      * Set history
      *
-     * @param  array   $history
+     * @param  array $history
      * @return Account
      */
     public function setHistory($history)

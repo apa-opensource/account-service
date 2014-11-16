@@ -73,12 +73,14 @@ class ServiceControllerTest extends \PHPUnit_Framework_TestCase
 
     public function testCreate()
     {
-        $request = $this->getRequestMock(array(
-            'amount'    => -100,
-            'currency'  => ServiceControllerTest::CURRENCY_DEFAULT,
-            'type'      => ServiceControllerTest::TYPE_DEFAULT,
-            'number'    => ServiceControllerTest::ACCOUNT_DEFAULT
-        ));
+        $request = $this->getRequestMock(
+            array(
+                'amount' => -100,
+                'currency' => ServiceControllerTest::CURRENCY_DEFAULT,
+                'type' => ServiceControllerTest::TYPE_DEFAULT,
+                'number' => ServiceControllerTest::ACCOUNT_DEFAULT
+            )
+        );
 
         /* @var JsonResponse */
         $jsonRespone = $this->controller->createAction($request);
@@ -93,12 +95,14 @@ class ServiceControllerTest extends \PHPUnit_Framework_TestCase
         $account = new Account();
         $account->setBalance(100);
 
-        $request = $this->getRequestMock(array(
-            'amount'    => 100,
-            'currency'  => ServiceControllerTest::CURRENCY_DEFAULT,
-            'type'      => ServiceControllerTest::TYPE_DEFAULT,
-            'number'    => ServiceControllerTest::ACCOUNT_DEFAULT
-        ));
+        $request = $this->getRequestMock(
+            array(
+                'amount' => 100,
+                'currency' => ServiceControllerTest::CURRENCY_DEFAULT,
+                'type' => ServiceControllerTest::TYPE_DEFAULT,
+                'number' => ServiceControllerTest::ACCOUNT_DEFAULT
+            )
+        );
 
         $jsonRespone = $this->controller->loadAction($request, $account);
 
@@ -116,12 +120,14 @@ class ServiceControllerTest extends \PHPUnit_Framework_TestCase
         $account = new Account();
         $account->setBalance(100);
 
-        $request = $this->getRequestMock(array(
-            'amount'    => -100,
-            'currency'  => ServiceControllerTest::CURRENCY_DEFAULT,
-            'type'      => ServiceControllerTest::TYPE_DEFAULT,
-            'number'    => ServiceControllerTest::ACCOUNT_DEFAULT
-        ));
+        $request = $this->getRequestMock(
+            array(
+                'amount' => -100,
+                'currency' => ServiceControllerTest::CURRENCY_DEFAULT,
+                'type' => ServiceControllerTest::TYPE_DEFAULT,
+                'number' => ServiceControllerTest::ACCOUNT_DEFAULT
+            )
+        );
 
         $jsonRespone = $this->controller->loadAction($request, $account);
 
@@ -132,12 +138,14 @@ class ServiceControllerTest extends \PHPUnit_Framework_TestCase
 
     public function testRedeem()
     {
-        $request = $this->getRequestMock(array(
-            'amount'    => 100,
-            'currency'  => ServiceControllerTest::CURRENCY_DEFAULT,
-            'type'      => ServiceControllerTest::TYPE_DEFAULT,
-            'number'    => ServiceControllerTest::ACCOUNT_DEFAULT
-        ));
+        $request = $this->getRequestMock(
+            array(
+                'amount' => 100,
+                'currency' => ServiceControllerTest::CURRENCY_DEFAULT,
+                'type' => ServiceControllerTest::TYPE_DEFAULT,
+                'number' => ServiceControllerTest::ACCOUNT_DEFAULT
+            )
+        );
 
         $jsonRespone = $this->controller->redeemAction($request, new Account());
 
@@ -152,12 +160,14 @@ class ServiceControllerTest extends \PHPUnit_Framework_TestCase
      */
     public function testRedeemNegativeAmount()
     {
-        $request = $this->getRequestMock(array(
-            'amount'    => -100,
-            'currency'  => ServiceControllerTest::CURRENCY_DEFAULT,
-            'type'      => ServiceControllerTest::TYPE_DEFAULT,
-            'number'    => ServiceControllerTest::ACCOUNT_DEFAULT
-        ));
+        $request = $this->getRequestMock(
+            array(
+                'amount' => -100,
+                'currency' => ServiceControllerTest::CURRENCY_DEFAULT,
+                'type' => ServiceControllerTest::TYPE_DEFAULT,
+                'number' => ServiceControllerTest::ACCOUNT_DEFAULT
+            )
+        );
 
         $jsonRespone = $this->controller->redeemAction($request, new Account());
 
@@ -218,12 +228,15 @@ class ServiceControllerTest extends \PHPUnit_Framework_TestCase
         $request
             ->expects($this->any())
             ->method('get')
-            ->willReturnCallback(function($key) use ($parameters) {
-                if(isset($parameters[$key])) {
-                    return $parameters[$key];
+            ->willReturnCallback(
+                function ($key) use ($parameters) {
+                    if (isset($parameters[$key])) {
+                        return $parameters[$key];
+                    }
+
+                    return null;
                 }
-                return null;
-            });
+            );
 
         return $request;
     }
@@ -239,15 +252,17 @@ class ServiceControllerTest extends \PHPUnit_Framework_TestCase
         $mock
             ->expects($this->any())
             ->method('get')
-            ->willReturnCallback(function($name) use ($self) {
-                if($name === 'fnc_account.service') {
-                    return $self->getServiceMock();
-                }
+            ->willReturnCallback(
+                function ($name) use ($self) {
+                    if ($name === 'fnc_account.service') {
+                        return $self->getServiceMock();
+                    }
 
-                if($name === 'fnc_account.converter_chain') {
+                    if ($name === 'fnc_account.converter_chain') {
 
+                    }
                 }
-            });
+            );
 
         return $mock;
     }
@@ -261,29 +276,44 @@ class ServiceControllerTest extends \PHPUnit_Framework_TestCase
         $mock
             ->expects($this->any())
             ->method('create')
-            ->willReturnCallback(function($amount, $currency, $referenceCode, $referenceMessage, $transactionCode, $type, $pin, $number)  {
-                $account = new Account();
+            ->willReturnCallback(
+                function (
+                    $amount,
+                    $currency,
+                    $referenceCode,
+                    $referenceMessage,
+                    $transactionCode,
+                    $type,
+                    $pin,
+                    $number
+                ) {
+                    $account = new Account();
 
-                $account->setBalance($amount);
-                $account->setCurrency($currency);
-                $account->setType($type);
-                $account->setPin($pin);
-                $account->setNumber($number);
+                    $account->setBalance($amount);
+                    $account->setCurrency($currency);
+                    $account->setType($type);
+                    $account->setPin($pin);
+                    $account->setNumber($number);
 
-                return $account;
-            });
+                    return $account;
+                }
+            );
 
         $mock
             ->method('booking')
-            ->willReturnCallback(function($account, $amount, $currency, $referenceCode, $referenceMessage, $transactionCode) {
-               return 0;
-            });
+            ->willReturnCallback(
+                function ($account, $amount, $currency, $referenceCode, $referenceMessage, $transactionCode) {
+                    return 0;
+                }
+            );
 
         $mock
             ->method('cancel')
-            ->willReturnCallback(function(Account $account) {
-                $account->setDisabled(true);
-            });
+            ->willReturnCallback(
+                function (Account $account) {
+                    $account->setDisabled(true);
+                }
+            );
 
 
         return $mock;

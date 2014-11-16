@@ -21,7 +21,7 @@ class Generator
         $num = array();
 
         for ($i = 0; $i < $size * $count; $i++) {
-            $num[] = rand(1,9);
+            $num[] = rand(1, 9);
 
             if ($separator !== null && ($i + 1) < ($size * $count) && (($i + 1) % $size) === 0) {
                 $num[] = $separator;

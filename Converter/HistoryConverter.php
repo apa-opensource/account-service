@@ -24,12 +24,12 @@ class HistoryConverter implements ConverterInterface
     public function transform($object)
     {
         return array(
-            'newBalance'        => $object->getNewBalance(),
-            'amount'            => $object->getAmount(),
-            'referenceCode'     => $object->getReferenceCode(),
-            'referenceMessage'  => $object->getReferenceMessage(),
-            'transactionCode'   => $object->getTransactionCode(),
-            'timestamp'         => $object->getTimestamp()
+            'newBalance' => $object->getNewBalance(),
+            'amount' => $object->getAmount(),
+            'referenceCode' => $object->getReferenceCode(),
+            'referenceMessage' => $object->getReferenceMessage(),
+            'transactionCode' => $object->getTransactionCode(),
+            'timestamp' => $object->getTimestamp()
         );
     }
 

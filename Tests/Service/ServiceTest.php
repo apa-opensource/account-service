@@ -14,7 +14,6 @@ use FNC\Bundle\AccountServiceBundle\Service\Service;
 use FNC\Bundle\AccountServiceBundle\Tests\AbstractTest;
 use FNC\Bundle\AccountServiceBundle\Tests\Service\Mock\Doctrine\ORM\EntityManagerMock;
 use FNC\Bundle\AccountServiceBundle\Tests\Service\Mock\GeneratorMock;
-use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpKernel\Log\NullLogger;
 
 class ServiceTest extends \PHPUnit_Framework_TestCase
@@ -80,13 +79,14 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testCreate()
     {
-        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(), $this->types, $this->currencies, new NullLogger());
+        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(
+        ), $this->types, $this->currencies, new NullLogger());
 
         $account = $service->create(0, ServiceTest::CURRENCY_DEFAULT, 100, null, 100, ServiceTest::TYPE_DEFAULT);
 
         $this->assertTrue($account instanceof Account, 'Invalid Account Value returned');
 
-        if($account !== null) {
+        if ($account !== null) {
             $this->assertEquals(0, $account->getBalance());
             $this->assertEquals(ServiceTest::CURRENCY_DEFAULT, $account->getCurrency());
             $this->assertEquals(ServiceTest::TYPE_DEFAULT, $account->getType());
@@ -99,9 +99,19 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateAlreadyExists()
     {
-        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(), $this->types, $this->currencies, new NullLogger());
+        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(
+        ), $this->types, $this->currencies, new NullLogger());
 
-        $service->create(0, ServiceTest::CURRENCY_DEFAULT, 100, null, 100, ServiceTest::TYPE_DEFAULT, null, ServiceTest::ACCOUNT_EXISTS);
+        $service->create(
+            0,
+            ServiceTest::CURRENCY_DEFAULT,
+            100,
+            null,
+            100,
+            ServiceTest::TYPE_DEFAULT,
+            null,
+            ServiceTest::ACCOUNT_EXISTS
+        );
     }
 
     /**
@@ -110,7 +120,8 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateInvalidCurrency()
     {
-        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(), $this->types, $this->currencies, new NullLogger());
+        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(
+        ), $this->types, $this->currencies, new NullLogger());
 
         $service->create(0, ServiceTest::CURRENCY_INVALID, 100, null, 100, ServiceTest::TYPE_DEFAULT);
     }
@@ -121,7 +132,8 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateInvalidType()
     {
-        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(), $this->types, $this->currencies, new NullLogger());
+        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(
+        ), $this->types, $this->currencies, new NullLogger());
 
         $service->create(0, ServiceTest::CURRENCY_DEFAULT, 100, null, 100, ServiceTest::TYPE_INVALID);
     }
@@ -132,7 +144,8 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateMissingTransactionCode()
     {
-        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(), $this->types, $this->currencies, new NullLogger());
+        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(
+        ), $this->types, $this->currencies, new NullLogger());
 
         $service->create(0, ServiceTest::CURRENCY_DEFAULT, 100, null, null, ServiceTest::TYPE_DEFAULT);
     }
@@ -143,7 +156,8 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateMissingReferenceCode()
     {
-        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(), $this->types, $this->currencies, new NullLogger());
+        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(
+        ), $this->types, $this->currencies, new NullLogger());
 
         $service->create(0, ServiceTest::CURRENCY_DEFAULT, null, null, 100, ServiceTest::TYPE_DEFAULT);
     }
@@ -151,9 +165,15 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testBookingLoad()
     {
-        $account = $this->getAccount(0, ServiceTest::CURRENCY_DEFAULT, ServiceTest::TYPE_DEFAULT, ServiceTest::ACCOUNT_DEFAULT);
+        $account = $this->getAccount(
+            0,
+            ServiceTest::CURRENCY_DEFAULT,
+            ServiceTest::TYPE_DEFAULT,
+            ServiceTest::ACCOUNT_DEFAULT
+        );
 
-        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(), $this->types, $this->currencies, new NullLogger());
+        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(
+        ), $this->types, $this->currencies, new NullLogger());
 
         $this->assertEquals(0, $service->booking($account, 100, ServiceTest::CURRENCY_DEFAULT, 100, null, 100));
 
@@ -162,15 +182,26 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testBookingRedeem()
     {
-        $account = $this->getAccount(100, ServiceTest::CURRENCY_DEFAULT, ServiceTest::TYPE_DEFAULT, ServiceTest::ACCOUNT_DEFAULT);
+        $account = $this->getAccount(
+            100,
+            ServiceTest::CURRENCY_DEFAULT,
+            ServiceTest::TYPE_DEFAULT,
+            ServiceTest::ACCOUNT_DEFAULT
+        );
 
-        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(), $this->types, $this->currencies, new NullLogger());
+        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(
+        ), $this->types, $this->currencies, new NullLogger());
 
         $this->assertEquals(0, $service->booking($account, -100, ServiceTest::CURRENCY_DEFAULT, 100, null, 100));
 
         $this->assertEquals(0, $account->getBalance());
 
-        $account = $this->getAccount(50, ServiceTest::CURRENCY_DEFAULT, ServiceTest::TYPE_DEFAULT, ServiceTest::ACCOUNT_DEFAULT);
+        $account = $this->getAccount(
+            50,
+            ServiceTest::CURRENCY_DEFAULT,
+            ServiceTest::TYPE_DEFAULT,
+            ServiceTest::ACCOUNT_DEFAULT
+        );
 
         $this->assertEquals(50, $service->booking($account, -100, ServiceTest::CURRENCY_DEFAULT, 100, null, 100));
 
@@ -183,9 +214,15 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testBookingCurrencyMissmatch()
     {
-        $account = $this->getAccount(0, ServiceTest::CURRENCY_DEFAULT, ServiceTest::TYPE_DEFAULT, ServiceTest::ACCOUNT_DEFAULT);
+        $account = $this->getAccount(
+            0,
+            ServiceTest::CURRENCY_DEFAULT,
+            ServiceTest::TYPE_DEFAULT,
+            ServiceTest::ACCOUNT_DEFAULT
+        );
 
-        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(), $this->types, $this->currencies, new NullLogger());
+        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(
+        ), $this->types, $this->currencies, new NullLogger());
 
         $service->booking($account, 100, ServiceTest::CURRENCY_INVALID, 100, null, 100);
     }
@@ -196,9 +233,16 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testBookingAccountDisabled()
     {
-        $account = $this->getAccount(0, ServiceTest::CURRENCY_DEFAULT, ServiceTest::TYPE_DEFAULT, ServiceTest::ACCOUNT_DEFAULT, true);
+        $account = $this->getAccount(
+            0,
+            ServiceTest::CURRENCY_DEFAULT,
+            ServiceTest::TYPE_DEFAULT,
+            ServiceTest::ACCOUNT_DEFAULT,
+            true
+        );
 
-        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(), $this->types, $this->currencies, new NullLogger());
+        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(
+        ), $this->types, $this->currencies, new NullLogger());
 
         $service->booking($account, 100, ServiceTest::CURRENCY_DEFAULT, 100, null, 100);
     }
@@ -209,9 +253,15 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testBookingInvalidReferenceCode()
     {
-        $account = $this->getAccount(0, ServiceTest::CURRENCY_DEFAULT, ServiceTest::TYPE_DEFAULT, ServiceTest::ACCOUNT_DEFAULT);
+        $account = $this->getAccount(
+            0,
+            ServiceTest::CURRENCY_DEFAULT,
+            ServiceTest::TYPE_DEFAULT,
+            ServiceTest::ACCOUNT_DEFAULT
+        );
 
-        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(), $this->types, $this->currencies, new NullLogger());
+        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(
+        ), $this->types, $this->currencies, new NullLogger());
 
         $service->booking($account, 100, ServiceTest::CURRENCY_DEFAULT, null, null, 100);
     }
@@ -222,18 +272,30 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testBookingInvalidTransactionCode()
     {
-        $account = $this->getAccount(0, ServiceTest::CURRENCY_DEFAULT, ServiceTest::TYPE_DEFAULT, ServiceTest::ACCOUNT_DEFAULT);
+        $account = $this->getAccount(
+            0,
+            ServiceTest::CURRENCY_DEFAULT,
+            ServiceTest::TYPE_DEFAULT,
+            ServiceTest::ACCOUNT_DEFAULT
+        );
 
-        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(), $this->types, $this->currencies, new NullLogger());
+        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(
+        ), $this->types, $this->currencies, new NullLogger());
 
         $service->booking($account, 100, ServiceTest::CURRENCY_DEFAULT, 100, null, null);
     }
 
     public function testBookingTransactionCodeFull()
     {
-        $account = $this->getAccount(self::ACCOUNT_TRANSACTION_AMOUNT, ServiceTest::CURRENCY_DEFAULT, ServiceTest::TYPE_DEFAULT, self::ACCOUNT_TRANSACTION);
+        $account = $this->getAccount(
+            self::ACCOUNT_TRANSACTION_AMOUNT,
+            ServiceTest::CURRENCY_DEFAULT,
+            ServiceTest::TYPE_DEFAULT,
+            self::ACCOUNT_TRANSACTION
+        );
 
-        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(), $this->types, $this->currencies, new NullLogger());
+        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(
+        ), $this->types, $this->currencies, new NullLogger());
 
         $this->assertEquals(0, $service->booking($account, -200, ServiceTest::CURRENCY_DEFAULT, 100, null, 100));
     }
@@ -244,18 +306,31 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testBookingTransactionCodeOverloaded()
     {
-        $account = $this->getAccount(self::ACCOUNT_TRANSACTION_AMOUNT, ServiceTest::CURRENCY_DEFAULT, ServiceTest::TYPE_DEFAULT, self::ACCOUNT_TRANSACTION);
+        $account = $this->getAccount(
+            self::ACCOUNT_TRANSACTION_AMOUNT,
+            ServiceTest::CURRENCY_DEFAULT,
+            ServiceTest::TYPE_DEFAULT,
+            self::ACCOUNT_TRANSACTION
+        );
 
-        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(), $this->types, $this->currencies, new NullLogger());
+        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(
+        ), $this->types, $this->currencies, new NullLogger());
 
         $this->assertEquals(0, $service->booking($account, -300, ServiceTest::CURRENCY_DEFAULT, 100, null, 100));
     }
 
     public function testCancel()
     {
-        $account = $this->getAccount(0, ServiceTest::CURRENCY_DEFAULT, ServiceTest::TYPE_DEFAULT, ServiceTest::ACCOUNT_DEFAULT, true);
+        $account = $this->getAccount(
+            0,
+            ServiceTest::CURRENCY_DEFAULT,
+            ServiceTest::TYPE_DEFAULT,
+            ServiceTest::ACCOUNT_DEFAULT,
+            true
+        );
 
-        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(), $this->types, $this->currencies, new NullLogger());
+        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(
+        ), $this->types, $this->currencies, new NullLogger());
 
         $service->cancel($account);
 
@@ -264,9 +339,16 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testActivate()
     {
-        $account = $this->getAccount(0, ServiceTest::CURRENCY_DEFAULT, ServiceTest::TYPE_DEFAULT, ServiceTest::ACCOUNT_DEFAULT, true);
+        $account = $this->getAccount(
+            0,
+            ServiceTest::CURRENCY_DEFAULT,
+            ServiceTest::TYPE_DEFAULT,
+            ServiceTest::ACCOUNT_DEFAULT,
+            true
+        );
 
-        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(), $this->types, $this->currencies, new NullLogger());
+        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(
+        ), $this->types, $this->currencies, new NullLogger());
 
         $service->activate($account);
 
@@ -274,7 +356,7 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
     }
 
 
-    public function getAccount($amount, $currency, $type, $number, $disabled = false,  $pin = null)
+    public function getAccount($amount, $currency, $type, $number, $disabled = false, $pin = null)
     {
         $account = new Account();
 
@@ -312,15 +394,19 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
         $mock
             ->expects($this->any())
             ->method('getRepository')
-            ->will($this->returnCallback(function($name) use ($self) {
-                if($name == 'FNCAccountServiceBundle:Account') {
-                    return $self->getAccountRepositoryMock();
-                }
+            ->will(
+                $this->returnCallback(
+                    function ($name) use ($self) {
+                        if ($name == 'FNCAccountServiceBundle:Account') {
+                            return $self->getAccountRepositoryMock();
+                        }
 
-                if($name == 'FNCAccountServiceBundle:History') {
-                    return $self->getHistoryRepositoryMock();
-                }
-            }));
+                        if ($name == 'FNCAccountServiceBundle:History') {
+                            return $self->getHistoryRepositoryMock();
+                        }
+                    }
+                )
+            );
 
         return $mock;
     }
@@ -334,11 +420,15 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
         $mock
             ->expects($this->any())
             ->method('findSumByAccountAndTransactionCode')
-            ->will($this->returnCallback(function(Account $account, $transactionCode) {
-                if($account->getNumber() == ServiceTest::ACCOUNT_TRANSACTION) {
-                    return ServiceTest::ACCOUNT_TRANSACTION_AMOUNT;
-                }
-            }));
+            ->will(
+                $this->returnCallback(
+                    function (Account $account, $transactionCode) {
+                        if ($account->getNumber() == ServiceTest::ACCOUNT_TRANSACTION) {
+                            return ServiceTest::ACCOUNT_TRANSACTION_AMOUNT;
+                        }
+                    }
+                )
+            );
 
         return $mock;
     }
@@ -351,16 +441,20 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
 
         $mock
             ->expects($this->any())
-                    ->method('findOneByNumber')
-                    ->will($this->returnCallback(function($number) {
-                        if($number === ServiceTest::ACCOUNT_EXISTS) {
+            ->method('findOneByNumber')
+            ->will(
+                $this->returnCallback(
+                    function ($number) {
+                        if ($number === ServiceTest::ACCOUNT_EXISTS) {
                             return new Account();
                         }
 
-                        if($number === ServiceTest::ACCOUNT_GENERATE_ID) {
+                        if ($number === ServiceTest::ACCOUNT_GENERATE_ID) {
                             return new Account();
                         }
-            }));
+                    }
+                )
+            );
 
         return $mock;
     }

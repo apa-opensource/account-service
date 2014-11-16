@@ -12,7 +12,6 @@ use Doctrine\ORM\EntityManager;
 use FNC\AccountBundle\Entity\Account;
 use FNC\AccountBundle\Entity\History;
 use FNC\AccountBundle\Generator\Generator;
-use Psr\Log\NullLogger;
 
 class Service
 {
@@ -82,14 +81,19 @@ class Service
     protected $logger;
 
     /**
-     * @param EntityManager $em
-     * @param Generator $generator
-     * @param array $types
-     * @param array $currencies
+     * @param EntityManager            $em
+     * @param Generator                $generator
+     * @param array                    $types
+     * @param array                    $currencies
      * @param \Psr\Log\LoggerInterface $logger
      */
-    public function __construct(EntityManager $em, Generator $generator, array $types, array $currencies, \Psr\Log\LoggerInterface $logger)
-    {
+    public function __construct(
+        EntityManager $em,
+        Generator $generator,
+        array $types,
+        array $currencies,
+        \Psr\Log\LoggerInterface $logger
+    ) {
         $this->em = $em;
 
         $this->generator = $generator;
@@ -102,19 +106,27 @@ class Service
     }
 
     /**
-     * @param $amount
-     * @param $currency
-     * @param $referenceCode
-     * @param $referenceMessage
-     * @param $transactionCode
-     * @param $type
+     * @param      $amount
+     * @param      $currency
+     * @param      $referenceCode
+     * @param      $referenceMessage
+     * @param      $transactionCode
+     * @param      $type
      * @param null $pin
      * @param null $number
      * @return Account
      * @throws \Exception
      */
-    public function create($amount, $currency, $referenceCode, $referenceMessage, $transactionCode, $type, $pin = null, $number = null)
-    {
+    public function create(
+        $amount,
+        $currency,
+        $referenceCode,
+        $referenceMessage,
+        $transactionCode,
+        $type,
+        $pin = null,
+        $number = null
+    ) {
         if ($referenceCode === null) {
             throw new \Exception('Missing Reference Code', self::ERR_INVALID_REFERENCE_CODE);
         }
@@ -135,11 +147,11 @@ class Service
 
         if ($number === null) {
             $number = $this->generateNumber();
-        }
-        else if($repo->findOneByNumber($number) !== null)
-        {
-            /* Optional Exception - Error Communication - Database Constraint existing */
-            throw new \Exception(sprintf('Number %s already existing', $number), self::ERR_ACCOUNT_ALREADY_EXISTS);
+        } else {
+            if ($repo->findOneByNumber($number) !== null) {
+                /* Optional Exception - Error Communication - Database Constraint existing */
+                throw new \Exception(sprintf('Number %s already existing', $number), self::ERR_ACCOUNT_ALREADY_EXISTS);
+            }
         }
 
         $account = new Account();
@@ -154,7 +166,13 @@ class Service
         $this->em->persist($account);
 
         $history = $this->createHistoryEntity(
-            $account, $amount, $amount, $referenceCode, $referenceMessage, $transactionCode);
+            $account,
+            $amount,
+            $amount,
+            $referenceCode,
+            $referenceMessage,
+            $transactionCode
+        );
 
         $this->em->persist($history);
 
@@ -165,16 +183,15 @@ class Service
 
     /**
      * @param Account $account
-     * @param $type
-     * @param $pin
-     * @param $number
+     * @param         $type
+     * @param         $pin
+     * @param         $number
      */
     public function update(Account $account, $type, $pin, $number)
     {
         $repo = $this->em->getRepository('FNCAccountServiceBundle:Account');
 
-        if($repo->findOneByNumber($number) !== null)
-        {
+        if ($repo->findOneByNumber($number) !== null) {
             /* Optional Exception - Error Communication - Database Constraint existing */
             throw new \Exception(sprintf('Number %s already existing', $number), self::ERR_ACCOUNT_ALREADY_EXISTS);
         }
@@ -191,19 +208,19 @@ class Service
 
     /**
      * @param Account $account
-     * @param $amount
-     * @param $currency
-     * @param $referenceCode
-     * @param $referenceMessage
-     * @param $transactionCode
+     * @param         $amount
+     * @param         $currency
+     * @param         $referenceCode
+     * @param         $referenceMessage
+     * @param         $transactionCode
      * @return int|number
      * @throws \Exception
      */
     public function booking(Account $account, $amount, $currency, $referenceCode, $referenceMessage, $transactionCode)
     {
-        $historyRepo    = $this->em->getRepository('FNCAccountServiceBundle:History');
+        $historyRepo = $this->em->getRepository('FNCAccountServiceBundle:History');
 
-        $rest               =  0;
+        $rest = 0;
 
         if ($account->getCurrency() != $currency) {
             throw new \Exception('Currency missmatch', self::ERR_CURRENCY_MISSMATCH);
@@ -224,7 +241,7 @@ class Service
         $transactionAmount = $historyRepo->findSumByAccountAndTransactionCode($account, $transactionCode);
 
         if ($transactionAmount !== null) {
-            if($amount > 0 || ($transactionAmount + $amount) < 0) {
+            if ($amount > 0 || ($transactionAmount + $amount) < 0) {
                 throw new \Exception('Transaction used', self::ERR_TRANSACTION_CODE_USED);
             }
         }
@@ -243,7 +260,13 @@ class Service
         $account->setBalance($balance);
 
         $history = $this->createHistoryEntity(
-            $account, $amount, $balance, $referenceCode, $referenceMessage, $transactionCode);
+            $account,
+            $amount,
+            $balance,
+            $referenceCode,
+            $referenceMessage,
+            $transactionCode
+        );
 
         $this->em->persist($account);
 
@@ -294,15 +317,21 @@ class Service
 
     /**
      * @param Account $account
-     * @param $amount
-     * @param $balance
-     * @param $referenceCode
-     * @param $referenceMessage
-     * @param $transactionCode
+     * @param integer $amount
+     * @param integer $balance
+     * @param string  $referenceCode
+     * @param string  $referenceMessage
+     * @param string  $transactionCode
      * @return History
      */
-    private function createHistoryEntity(Account $account, $amount, $balance, $referenceCode, $referenceMessage, $transactionCode)
-    {
+    private function createHistoryEntity(
+        Account $account,
+        $amount,
+        $balance,
+        $referenceCode,
+        $referenceMessage,
+        $transactionCode
+    ) {
         $history = new History();
 
         $history

@@ -15,11 +15,18 @@ class ConverterChain
      */
     protected $converter;
 
+    /**
+     * @param array $converter
+     */
     public function __construct(array $converter)
     {
         $this->converter = $converter;
     }
 
+    /**
+     * @param $object
+     * @return mixed
+     */
     public function convert($object)
     {
         foreach ($this->converter as $converter) {

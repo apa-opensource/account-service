@@ -12,13 +12,26 @@ use Doctrine\ORM\EntityRepository;
  */
 class HistoryRepository extends EntityRepository
 {
+    /**
+     * @param Account $account
+     * @param string  $transactionCode
+     * @return History
+     */
     public function findOneByAccountAndTransactionCode(Account $account, $transactionCode)
     {
-        return $this->findOneBy(array(
-            'account'           =>  $account,
-            'transactionCode'   => $transactionCode));
+        return $this->findOneBy(
+            array(
+                'account' => $account,
+                'transactionCode' => $transactionCode
+            )
+        );
     }
 
+    /**
+     * @param Account $account
+     * @param string  $transactionCode
+     * @return integer
+     */
     public function findSumByAccountAndTransactionCode(Account $account, $transactionCode)
     {
         $dql = "SELECT SUM(e.amount) AS amount FROM FNC\AccountBundle\Entity\History e " .

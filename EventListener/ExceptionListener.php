@@ -37,9 +37,12 @@ class ExceptionListener implements EventSubscriberInterface
         if (stripos($event->getRequest()->getPathInfo(), '/service') === 0) {
             $this->logger->error($exception->getCode() . '-' . $exception->getMessage());
 
-            $event->setResponse(new JsonResponse(array(
-                'code'      => $exception->getCode(),
-                'message'   => $exception->getMessage())));
+            $event->setResponse(
+                new JsonResponse(array(
+                    'code' => $exception->getCode(),
+                    'message' => $exception->getMessage()
+                ))
+            );
         }
 
         $handling = false;

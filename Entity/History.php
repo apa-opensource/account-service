@@ -73,7 +73,7 @@ class History
 
     public function __construct()
     {
-        $this->timestamp        = new \DateTime();
+        $this->timestamp = new \DateTime();
     }
 
     /**
@@ -135,7 +135,7 @@ class History
     /**
      * Set referenceCode
      *
-     * @param  string  $referenceCode
+     * @param  string $referenceCode
      * @return History
      */
     public function setReferenceCode($referenceCode)

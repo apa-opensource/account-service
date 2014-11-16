@@ -43,8 +43,8 @@ class AccountNumberConverter implements ParamConverterInterface
 
         $name = $configuration->getName();
 
-        $number  = $request->get('number');
-        $pin     = $request->get('pin');
+        $number = $request->get('number');
+        $pin = $request->get('pin');
 
         $repository = $this->em->getRepository('FNCAccountServiceBundle:Account');
 
@@ -55,7 +55,7 @@ class AccountNumberConverter implements ParamConverterInterface
             $request->attributes->set($name, $account);
         }
 
-        if($account === null) {
+        if ($account === null) {
             throw new \Exception('Invalid Account given');
         }
 
@@ -68,6 +68,10 @@ class AccountNumberConverter implements ParamConverterInterface
      */
     public function supports(ParamConverter $configuration)
     {
-        return $configuration->getClass() && is_a($configuration->getClass(), 'FNC\Bundle\AccountServiceBundle\Entity\Account', true);
+        return $configuration->getClass() && is_a(
+            $configuration->getClass(),
+            'FNC\Bundle\AccountServiceBundle\Entity\Account',
+            true
+        );
     }
 }

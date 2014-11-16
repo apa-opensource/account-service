@@ -10,7 +10,15 @@ namespace FNC\Bundle\AccountServiceBundle\Converter;
 
 interface ConverterInterface
 {
+    /**
+     * @param $object
+     * @return mixed
+     */
     public function canHandle($object);
 
+    /**
+     * @param $object
+     * @return mixed
+     */
     public function transform($object);
 }
