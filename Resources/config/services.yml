@@ -12,7 +12,7 @@ parameters:
 
 services:
 #    fnc_account_service.example:
-#        class: FNC\AccountBundle\Example
+#        class: FNC\Bundle\AccountServiceBundle \Example
 #        arguments: [@service_id, "plain_value", %parameter%]
     fnc_account_service.account_number_converter:
         class:        %fnc_account_service.paramconverter.account_number_converter.class%

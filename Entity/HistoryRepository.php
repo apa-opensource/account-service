@@ -34,7 +34,7 @@ class HistoryRepository extends EntityRepository
      */
     public function findSumByAccountAndTransactionCode(Account $account, $transactionCode)
     {
-        $dql = "SELECT SUM(e.amount) AS amount FROM FNC\AccountBundle\Entity\History e " .
+        $dql = "SELECT SUM(e.amount) AS amount FROM FNC\Bundle\AccountServiceBundle\Entity\History e " .
             "WHERE e.account = ?1 AND e.transactionCode = ?2";
 
         $em = $this->getEntityManager();
