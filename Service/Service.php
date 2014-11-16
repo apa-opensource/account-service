@@ -131,7 +131,7 @@ class Service
             throw new \Exception('Ivalid Type given', self::ERR_INVALID_TYPE);
         }
 
-        $repo = $this->em->getRepository('FNCAccountBundle:Account');
+        $repo = $this->em->getRepository('FNCAccountServiceBundle:Account');
 
         if ($number === null) {
             $number = $this->generateNumber();
@@ -171,7 +171,7 @@ class Service
      */
     public function update(Account $account, $type, $pin, $number)
     {
-        $repo = $this->em->getRepository('FNCAccountBundle:Account');
+        $repo = $this->em->getRepository('FNCAccountServiceBundle:Account');
 
         if($repo->findOneByNumber($number) !== null)
         {
@@ -201,7 +201,7 @@ class Service
      */
     public function booking(Account $account, $amount, $currency, $referenceCode, $referenceMessage, $transactionCode)
     {
-        $historyRepo    = $this->em->getRepository('FNCAccountBundle:History');
+        $historyRepo    = $this->em->getRepository('FNCAccountServiceBundle:History');
 
         $rest               =  0;
 
@@ -283,7 +283,7 @@ class Service
     {
         $number = $this->generator->generate();
 
-        $repo = $this->em->getRepository('FNCAccountBundle:Account');
+        $repo = $this->em->getRepository('FNCAccountServiceBundle:Account');
 
         if ($repo->findOneByNumber($number) !== null) {
             return $this->generateNumber();

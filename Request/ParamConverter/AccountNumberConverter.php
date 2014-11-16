@@ -46,7 +46,7 @@ class AccountNumberConverter implements ParamConverterInterface
         $number  = $request->get('number');
         $pin     = $request->get('pin');
 
-        $repository = $this->em->getRepository('FNCAccountBundle:Account');
+        $repository = $this->em->getRepository('FNCAccountServiceBundle:Account');
 
         /* @var Account $account */
         $account = $repository->findOneByNumber($number);
@@ -68,6 +68,6 @@ class AccountNumberConverter implements ParamConverterInterface
      */
     public function supports(ParamConverter $configuration)
     {
-        return $configuration->getClass() && is_a($configuration->getClass(), 'FNC\AccountBundle\Entity\Account', true);
+        return $configuration->getClass() && is_a($configuration->getClass(), 'FNC\Bundle\AccountServiceBundle\Entity\Account', true);
     }
 }
