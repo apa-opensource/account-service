@@ -62,7 +62,7 @@ class Service
     protected $em;
 
     /**
-     * @var \FNC\AccountBundle\Generator\Generator
+     * @var \FNC\Bundle\AccountServiceBundle\Generator\Generator
      */
     protected $generator;
 
