@@ -2,11 +2,11 @@
 
 namespace FNC\Bundle\AccountServiceBundle\Controller;
 
-use FNC\AccountBundle\Converter\ConverterChain;
-use FNC\AccountBundle\Entity\Account;
-use FNC\AccountBundle\Entity\History;
+use FNC\Bundle\AccountServiceBundle\Converter\ConverterChain;
+use FNC\Bundle\AccountServiceBundle\Entity\Account;
+use FNC\Bundle\AccountServiceBundle\Entity\History;
 
-use FNC\AccountBundle\Service\Service;
+use FNC\Bundle\AccountServiceBundle \Service\Service;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

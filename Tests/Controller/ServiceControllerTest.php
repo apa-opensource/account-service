@@ -9,8 +9,8 @@
 namespace FNC\Bundle\AccountServiceBundle\Tests\Controller;
 
 
-use FNC\AccountBundle\Controller\ServiceController;
-use FNC\AccountBundle\Entity\Account;
+use FNC\Bundle\AccountServiceBundle\Controller\ServiceController;
+use FNC\Bundle\AccountServiceBundle\Entity\Account;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class ServiceControllerTest extends \PHPUnit_Framework_TestCase
@@ -254,7 +254,7 @@ class ServiceControllerTest extends \PHPUnit_Framework_TestCase
 
     public function getServiceMock()
     {
-        $mock = $this->getMockBuilder('FNC\AccountBundle\Service\Service')
+        $mock = $this->getMockBuilder('FNC\Bundle\AccountServiceBundle\Service\Service')
             ->disableOriginalConstructor()
             ->getMock();
 

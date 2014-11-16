@@ -9,11 +9,11 @@
 namespace FNC\Bundle\AccountServiceBundle\Tests\Service;
 
 
-use FNC\AccountBundle\Entity\Account;
-use FNC\AccountBundle\Service\Service;
-use FNC\AccountBundle\Tests\AbstractTest;
-use FNC\AccountBundle\Tests\Service\Mock\Doctrine\ORM\EntityManagerMock;
-use FNC\AccountBundle\Tests\Service\Mock\GeneratorMock;
+use FNC\Bundle\AccountServiceBundle\Entity\Account;
+use FNC\Bundle\AccountServiceBundle\Service\Service;
+use FNC\Bundle\AccountServiceBundle\Tests\AbstractTest;
+use FNC\Bundle\AccountServiceBundle\Tests\Service\Mock\Doctrine\ORM\EntityManagerMock;
+use FNC\Bundle\AccountServiceBundle\Tests\Service\Mock\GeneratorMock;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpKernel\Log\NullLogger;
 
@@ -291,7 +291,7 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
 
     public function getGeneratorMock()
     {
-        $mock = $this->getMock('FNC\AccountBundle\Generator\Generator');
+        $mock = $this->getMock('FNC\Bundle\AccountServiceBundle\Generator\Generator');
 
         $mock
             ->expects($this->any())
@@ -313,11 +313,11 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getRepository')
             ->will($this->returnCallback(function($name) use ($self) {
-                if($name == 'FNCAccountBundle:Account') {
+                if($name == 'FNCAccountServiceBundle:Account') {
                     return $self->getAccountRepositoryMock();
                 }
 
-                if($name == 'FNCAccountBundle:History') {
+                if($name == 'FNCAccountServiceBundle:History') {
                     return $self->getHistoryRepositoryMock();
                 }
             }));
@@ -327,7 +327,7 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
 
     public function getHistoryRepositoryMock()
     {
-        $mock = $this->getMockBuilder('FNC\AccountBundle\Entity\HistoryRepository')
+        $mock = $this->getMockBuilder('FNC\Bundle\AccountServiceBundle\Entity\HistoryRepository')
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -345,7 +345,7 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
 
     public function getAccountRepositoryMock()
     {
-        $mock = $this->getMockBuilder('FNC\AccountBundle\Entity\AccountRepository')
+        $mock = $this->getMockBuilder('FNC\Bundle\AccountServiceBundle\Entity\AccountRepository')
             ->disableOriginalConstructor()
             ->getMock();
 

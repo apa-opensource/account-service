@@ -1,14 +1,14 @@
 parameters:
-    fnc_account.paramconverter.account_number_converter.class: FNC\AccountBundle\Request\ParamConverter\AccountNumberConverter
+    fnc_account.paramconverter.account_number_converter.class: FNC\Bundle\AccountServiceBundle\Request\ParamConverter\AccountNumberConverter
 
-    fnc_account.generator.class: FNC\AccountBundle\Generator\Generator
-    fnc_account.service.class: FNC\AccountBundle\Service\Service
+    fnc_account.generator.class: FNC\Bundle\AccountServiceBundle\Generator\Generator
+    fnc_account.service.class: FNC\Bundle\AccountServiceBundle\Service\Service
 
-    fnc_account.converter.history.class: FNC\AccountBundle\Converter\HistoryConverter
-    fnc_account.converter.account.class: FNC\AccountBundle\Converter\AccountConverter
-    fnc_account.converter.chain.class: FNC\AccountBundle\Converter\ConverterChain
+    fnc_account.converter.history.class: FNC\Bundle\AccountServiceBundle\Converter\HistoryConverter
+    fnc_account.converter.account.class: FNC\Bundle\AccountServiceBundle\Converter\AccountConverter
+    fnc_account.converter.chain.class: FNC\Bundle\AccountServiceBundle\Converter\ConverterChain
 
-    fnc_account.exception_listener.class: FNC\AccountBundle\EventListener\ExceptionListener
+    fnc_account.exception_listener.class: FNC\Bundle\AccountServiceBundle\EventListener\ExceptionListener
 
 services:
 #    fnc_account.example:
