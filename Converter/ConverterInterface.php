@@ -6,7 +6,7 @@
  * Time: 22:35
  */
 
-namespace FNC\AccountBundle\Converter;
+namespace FNC\Bundle\AccountServiceBundle\Converter;
 
 interface ConverterInterface
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace FNC\AccountBundle\Entity;
+namespace FNC\Bundle\AccountServiceBundle\Entity;
 
 use Doctrine\ORM\EntityRepository;
 

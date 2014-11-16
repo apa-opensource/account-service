@@ -6,7 +6,7 @@
  * Time: 21:39
  */
 
-namespace FNC\AccountBundle\Service;
+namespace FNC\Bundle\AccountServiceBundle\Service;
 
 use Doctrine\ORM\EntityManager;
 use FNC\AccountBundle\Entity\Account;

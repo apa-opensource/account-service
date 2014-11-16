@@ -6,10 +6,10 @@
  * Time: 04:13
  */
 
-namespace FNC\AccountBundle\Tests\Generator;
+namespace FNC\Bundle\AccountServiceBundle\Tests\Generator;
 
 
-use FNC\AccountBundle\Generator\Generator;
+use FNC\Bundle\AccountServiceBundle\Generator\Generator;
 
 class GeneratorTest extends \PHPUnit_Framework_TestCase
 {

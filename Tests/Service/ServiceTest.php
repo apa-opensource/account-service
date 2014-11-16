@@ -6,7 +6,7 @@
  * Time: 21:04
  */
 
-namespace FNC\AccountBundle\Tests\Service;
+namespace FNC\Bundle\AccountServiceBundle\Tests\Service;
 
 
 use FNC\AccountBundle\Entity\Account;

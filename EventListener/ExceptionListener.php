@@ -6,7 +6,7 @@
  * Time: 21:21
  */
 
-namespace FNC\AccountBundle\EventListener;
+namespace FNC\Bundle\AccountServiceBundle\EventListener;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;

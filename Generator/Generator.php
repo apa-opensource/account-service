@@ -6,7 +6,7 @@
  * Time: 23:01
  */
 
-namespace FNC\AccountBundle\Generator;
+namespace FNC\Bundle\AccountServiceBundle\Generator;
 
 class Generator
 {

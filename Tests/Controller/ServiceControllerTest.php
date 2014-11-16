@@ -6,7 +6,7 @@
  * Time: 01:32
  */
 
-namespace FNC\AccountBundle\Tests\Controller;
+namespace FNC\Bundle\AccountServiceBundle\Tests\Controller;
 
 
 use FNC\AccountBundle\Controller\ServiceController;

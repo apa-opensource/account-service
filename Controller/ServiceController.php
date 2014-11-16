@@ -1,6 +1,6 @@
 <?php
 
-namespace FNC\AccountBundle\Controller;
+namespace FNC\Bundle\AccountServiceBundle\Controller;
 
 use FNC\AccountBundle\Converter\ConverterChain;
 use FNC\AccountBundle\Entity\Account;

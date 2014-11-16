@@ -6,7 +6,7 @@
  * Time: 22:39
  */
 
-namespace FNC\AccountBundle\Converter;
+namespace FNC\Bundle\AccountServiceBundle\Converter;
 
 class ConverterChain
 {

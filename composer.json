@@ -1,5 +1,5 @@
 {
-    "name": "fnc/account-bundle",
+    "name": "fnc/account-service-bundle",
     "authors": [
         {
             "name": "Carsten Eilers",
@@ -19,6 +19,6 @@
         "phpunit/phpunit": "~4.3"
     },
     "autoload": {
-        "psr-4": { "FNC\\AccountBundle\\": "" }
+        "psr-4": { "FNC\\Bundle\\AccountServiceBundle\\": "" }
     }
 }

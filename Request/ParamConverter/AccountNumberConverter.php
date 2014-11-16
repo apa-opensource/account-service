@@ -6,7 +6,7 @@
  * Time: 00:05
  */
 
-namespace FNC\AccountBundle\Request\ParamConverter;
+namespace FNC\Bundle\AccountServiceBundle\Request\ParamConverter;
 
 use Doctrine\ORM\EntityManager;
 use FNC\AccountBundle\Entity\Account;

@@ -6,9 +6,9 @@
  * Time: 22:34
  */
 
-namespace FNC\AccountBundle\Converter;
+namespace FNC\Bundle\AccountServiceBundle\Converter;
 
-use FNC\AccountBundle\Entity\History;
+use FNC\Bundle\AccountServiceBundle\Entity\History;
 
 class HistoryConverter implements ConverterInterface
 {
