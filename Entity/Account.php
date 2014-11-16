@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Account
  *
  * @ORM\Table()
- * @ORM\Entity(repositoryClass="FNC\AccountBundle\Entity\AccountRepository")
+ * @ORM\Entity(repositoryClass="FNC\Bundle\AccountServiceBundle\Entity\AccountRepository")
  */
 class Account
 {
