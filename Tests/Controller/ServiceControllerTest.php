@@ -82,12 +82,9 @@ class ServiceControllerTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        /* @var JsonResponse */
-        $jsonRespone = $this->controller->createAction($request);
+        $return = $this->controller->createAction($request);
 
-        $object = json_decode($jsonRespone->getContent());
-
-        $this->assertEquals(ServiceControllerTest::ACCOUNT_DEFAULT, $object->number);
+        $this->assertEquals(ServiceControllerTest::ACCOUNT_DEFAULT, $return['number']);
     }
 
     public function testLoad()
@@ -104,16 +101,14 @@ class ServiceControllerTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $jsonRespone = $this->controller->loadAction($request, $account);
+        $return = $this->controller->loadAction($request, $account);
 
-        $object = json_decode($jsonRespone->getContent());
-
-        $this->assertEquals(100, $object->balance);
+        $this->assertEquals(100, $return['balance']);
     }
 
     /**
      * @expectedException       \Exception
-     * @expectedExceptionCode   FNC\AccountBundle\Controller\ServiceController::ERR_SERVICE_NEGATIVE_AMOUNT
+     * @expectedExceptionCode   FNC\Bundle\AccountServiceBundle\Controller\ServiceController::ERR_SERVICE_NEGATIVE_AMOUNT
      */
     public function testLoadNegativeAmount()
     {
@@ -129,11 +124,9 @@ class ServiceControllerTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $jsonRespone = $this->controller->loadAction($request, $account);
+        $return = $this->controller->loadAction($request, $account);
 
-        $object = json_decode($jsonRespone->getContent());
-
-        $this->assertEquals(100, $object->balance);
+        $this->assertEquals(100, $return['balance']);
     }
 
     public function testRedeem()
@@ -147,16 +140,14 @@ class ServiceControllerTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $jsonRespone = $this->controller->redeemAction($request, new Account());
+        $return = $this->controller->redeemAction($request, new Account());
 
-        $object = json_decode($jsonRespone->getContent());
-
-        $this->assertEquals(0, $object->rest);
+        $this->assertEquals(0, $return['rest']);
     }
 
     /**
      * @expectedException       \Exception
-     * @expectedExceptionCode   FNC\AccountBundle\Controller\ServiceController::ERR_SERVICE_NEGATIVE_AMOUNT
+     * @expectedExceptionCode   FNC\Bundle\AccountServiceBundle\Controller\ServiceController::ERR_SERVICE_NEGATIVE_AMOUNT
      */
     public function testRedeemNegativeAmount()
     {
@@ -169,38 +160,30 @@ class ServiceControllerTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $jsonRespone = $this->controller->redeemAction($request, new Account());
+        $return = $this->controller->redeemAction($request, new Account());
 
-        $object = json_decode($jsonRespone->getContent());
-
-        $this->assertEquals(0, $object->rest);
+        $this->assertEquals(0, $return['rest']);
     }
 
     public function testCancel()
     {
-        $jsonRespone = $this->controller->cancelAction(new Account());
+        $return = $this->controller->cancelAction(new Account());
 
-        $object = json_decode($jsonRespone->getContent());
-
-        $this->assertEquals(true, $object->disabled);
+        $this->assertEquals(true, $return['disabled']);
     }
 
     public function testActivate()
     {
-        $jsonRespone = $this->controller->activateAction(new Account());
+        $return = $this->controller->activateAction(new Account());
 
-        $object = json_decode($jsonRespone->getContent());
-
-        $this->assertEquals(false, $object->disabled);
+        $this->assertEquals(false, $return['disabled']);
     }
 
     public function testStatus()
     {
-        $jsonRespone = $this->controller->statusAction(new Account());
+        $return = $this->controller->statusAction(new Account());
 
-        $object = json_decode($jsonRespone->getContent());
-
-        $this->assertTrue(property_exists($object, 'disabled'));
+        $this->assertTrue(isset($return['disabled']));
     }
 
     public function testBalance()
@@ -211,12 +194,10 @@ class ServiceControllerTest extends \PHPUnit_Framework_TestCase
             ->setBalance(200)
             ->setCurrency(self::CURRENCY_DEFAULT);
 
-        $jsonRespone = $this->controller->balanceAction($account);
+        $return = $this->controller->balanceAction($account);
 
-        $object = json_decode($jsonRespone->getContent());
-
-        $this->assertEquals(200, $object->balance);
-        $this->assertEquals(self::CURRENCY_DEFAULT, $object->currency);
+        $this->assertEquals(200, $return['balance']);
+        $this->assertEquals(self::CURRENCY_DEFAULT, $return['currency']);
     }
 
     public function getRequestMock(array $parameters)

@@ -9,7 +9,7 @@
 namespace FNC\Bundle\AccountServiceBundle\Request\ParamConverter;
 
 use Doctrine\ORM\EntityManager;
-use FNC\AccountBundle\Entity\Account;
+use FNC\Bundle\AccountServiceBundle\Entity\Account;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\HttpFoundation\Request;

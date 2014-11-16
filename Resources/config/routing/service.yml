@@ -6,7 +6,7 @@ fnc_account_service_create:
 fnc_account_service_balance:
     path:     /balance/{number}/
     defaults: { _controller: FNCAccountServiceBundle:Service:balance }
-    methods:  [POST]
+    methods:  [POST, GET]
 
 fnc_account_service_status:
     path:     /status/{number}/

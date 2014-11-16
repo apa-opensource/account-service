@@ -8,6 +8,7 @@ use FNC\Bundle\AccountServiceBundle \Service\Service;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 
 class ServiceController extends Controller
 {
@@ -49,10 +50,10 @@ class ServiceController extends Controller
             $number
         );
 
-        return new JsonResponse(array(
+        return array(
             'number' => $account->getNumber(),
             'pin' => $account->getPin()
-        ));
+        );
 
     }
 
@@ -76,11 +77,11 @@ class ServiceController extends Controller
 
         $account = $service->update($account, $type, $pin, $number);
 
-        return new JsonResponse(array(
+        return array(
             'id' => $account->getId(),
             'number' => $account->getNumber(),
             'pin' => $account->getPin()
-        ));
+        );
 
     }
 
@@ -92,7 +93,7 @@ class ServiceController extends Controller
      *
      * @return JsonResponse
      *
-     * @ParamConverter("account", class="FNC\AccountBundle\Entity\Account")
+     * @ParamConverter("account", class="FNC\Bundle\AccountServiceBundle\Entity\Account")
      */
     public function loadAction(Request $request, Account $account)
     {
@@ -112,9 +113,9 @@ class ServiceController extends Controller
         $rest =
             $service->booking($account, $amount, $currency, $referenceCode, $referenceMessage, $transactionCode);
 
-        return new JsonResponse(array(
+        return array(
             'balance' => $account->getBalance()
-        ));
+        );
     }
 
     /**
@@ -125,7 +126,7 @@ class ServiceController extends Controller
      *
      * @return JsonResponse
      *
-     * @ParamConverter("account", class="FNC\AccountBundle\Entity\Account")
+     * @ParamConverter("account", class="FNC\Bundle\AccountServiceBundle\Entity\Account")
      */
     public function redeemAction(Request $request, Account $account)
     {
@@ -145,9 +146,9 @@ class ServiceController extends Controller
         $rest =
             $service->booking($account, -1 * $amount, $currency, $referenceCode, $referenceMessage, $transactionCode);
 
-        return new JsonResponse(array(
+        return array(
             'rest' => $rest
-        ));
+        );
     }
 
     /**
@@ -158,7 +159,7 @@ class ServiceController extends Controller
      *
      * @return mixed
      *
-     * @ParamConverter("account", class="FNC\AccountBundle\Entity\Account")
+     * @ParamConverter("account", class="FNC\Bundle\AccountServiceBundle\Entity\Account")
      */
     public function cancelAction(Account $account)
     {
@@ -167,7 +168,7 @@ class ServiceController extends Controller
 
         $service->cancel($account);
 
-        return new JsonResponse(array('disabled' => $account->isDisabled()));
+        return array('disabled' => $account->isDisabled());
     }
 
     /**
@@ -178,7 +179,7 @@ class ServiceController extends Controller
      *
      * @return mixed
      *
-     * @ParamConverter("account", class="FNC\AccountBundle\Entity\Account")
+     * @ParamConverter("account", class="FNC\Bundle\AccountServiceBundle\Entity\Account")
      */
     public function activateAction(Account $account)
     {
@@ -187,7 +188,7 @@ class ServiceController extends Controller
 
         $service->activate($account);
 
-        return new JsonResponse(array('disabled' => $account->isDisabled()));
+        return array('disabled' => $account->isDisabled());
     }
 
     /**
@@ -196,11 +197,11 @@ class ServiceController extends Controller
      *
      * @return mixed
      *
-     * @ParamConverter("account", class="FNC\AccountBundle\Entity\Account")
+     * @ParamConverter("account", class="FNC\Bundle\AccountServiceBundle\Entity\Account")
      */
     public function statusAction(Account $account)
     {
-        return new JsonResponse(array('disabled' => $account->isDisabled()));
+        return array('disabled' => $account->isDisabled());
     }
 
     /**
@@ -208,33 +209,33 @@ class ServiceController extends Controller
      * @param $pin
      * @return mixed
      *
-     * @ParamConverter("account", class="FNC\AccountBundle\Entity\Account")
+     * @ParamConverter("account", class="FNC\Bundle\AccountServiceBundle\Entity\Account")
      */
     public function balanceAction(Account $account)
     {
-        return new JsonResponse(array(
+        return array(
             'balance' => $account->getBalance(),
             'currency' => $account->getCurrency()
-        ));
+        );
     }
 
     /**
      * @param  Account $account
      * @return JsonResponse
-     * @ParamConverter("account", class="FNC\AccountBundle\Entity\Account")
+     * @ParamConverter("account", class="FNC\Bundle\AccountServiceBundle\Entity\Account")
      */
     public function infoAction(Account $account)
     {
         /* @var ConverterChain $converter */
         $converter = $this->get('fnc_account.converter_chain');
 
-        return new JsonResponse($converter->convert($account));
+        return $converter->convert($account);
     }
 
     /**
      * @param  Account $account
      * @return JsonResponse
-     * @ParamConverter("account", class="FNC\AccountBundle\Entity\Account")
+     * @ParamConverter("account", class="FNC\Bundle\AccountServiceBundle\Entity\Account")
      */
     public function historyAction(Account $account)
     {
@@ -247,6 +248,6 @@ class ServiceController extends Controller
             $list[] = $converter->convert($history);
         }
 
-        return new JsonResponse($list);
+        return $list;
     }
 }

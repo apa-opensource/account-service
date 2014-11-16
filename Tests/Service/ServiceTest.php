@@ -95,7 +95,7 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException       \Exception
-     * @expectedExceptionCode   FNC\AccountBundle\Service\Service::ERR_ACCOUNT_ALREADY_EXISTS
+     * @expectedExceptionCode   FNC\Bundle\AccountServiceBundle\Service\Service::ERR_ACCOUNT_ALREADY_EXISTS
      */
     public function testCreateAlreadyExists()
     {
@@ -116,7 +116,7 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException       \Exception
-     * @expectedExceptionCode   FNC\AccountBundle\Service\Service::ERR_INVALID_CURRENCY
+     * @expectedExceptionCode   FNC\Bundle\AccountServiceBundle\Service\Service::ERR_INVALID_CURRENCY
      */
     public function testCreateInvalidCurrency()
     {
@@ -128,7 +128,7 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException       \Exception
-     * @expectedExceptionCode   FNC\AccountBundle\Service\Service::ERR_INVALID_TYPE
+     * @expectedExceptionCode   FNC\Bundle\AccountServiceBundle\Service\Service::ERR_INVALID_TYPE
      */
     public function testCreateInvalidType()
     {
@@ -140,7 +140,7 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException       \Exception
-     * @expectedExceptionCode   FNC\AccountBundle\Service\Service::ERR_INVALID_TRANSACTION_CODE
+     * @expectedExceptionCode   FNC\Bundle\AccountServiceBundle\Service\Service::ERR_INVALID_TRANSACTION_CODE
      */
     public function testCreateMissingTransactionCode()
     {
@@ -152,7 +152,7 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException       \Exception
-     * @expectedExceptionCode   FNC\AccountBundle\Service\Service::ERR_INVALID_REFERENCE_CODE
+     * @expectedExceptionCode   FNC\Bundle\AccountServiceBundle\Service\Service::ERR_INVALID_REFERENCE_CODE
      */
     public function testCreateMissingReferenceCode()
     {
@@ -210,7 +210,7 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException       \Exception
-     * @expectedExceptionCode   FNC\AccountBundle\Service\Service::ERR_CURRENCY_MISSMATCH
+     * @expectedExceptionCode   FNC\Bundle\AccountServiceBundle\Service\Service::ERR_CURRENCY_MISSMATCH
      */
     public function testBookingCurrencyMissmatch()
     {
@@ -229,7 +229,7 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException       \Exception
-     * @expectedExceptionCode   FNC\AccountBundle\Service\Service::ERR_ACCOUNT_DISABLED
+     * @expectedExceptionCode   FNC\Bundle\AccountServiceBundle\Service\Service::ERR_ACCOUNT_DISABLED
      */
     public function testBookingAccountDisabled()
     {
@@ -249,7 +249,7 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException       \Exception
-     * @expectedExceptionCode   FNC\AccountBundle\Service\Service::ERR_INVALID_REFERENCE_CODE
+     * @expectedExceptionCode   FNC\Bundle\AccountServiceBundle\Service\Service::ERR_INVALID_REFERENCE_CODE
      */
     public function testBookingInvalidReferenceCode()
     {
@@ -268,7 +268,7 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException       \Exception
-     * @expectedExceptionCode   FNC\AccountBundle\Service\Service::ERR_INVALID_TRANSACTION_CODE
+     * @expectedExceptionCode   FNC\Bundle\AccountServiceBundle\Service\Service::ERR_INVALID_TRANSACTION_CODE
      */
     public function testBookingInvalidTransactionCode()
     {
@@ -302,7 +302,7 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException       \Exception
-     * @expectedExceptionCode   FNC\AccountBundle\Service\Service::ERR_TRANSACTION_CODE_USED
+     * @expectedExceptionCode   FNC\Bundle\AccountServiceBundle\Service\Service::ERR_TRANSACTION_CODE_USED
      */
     public function testBookingTransactionCodeOverloaded()
     {
@@ -329,8 +329,8 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
             true
         );
 
-        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(
-        ), $this->types, $this->currencies, new NullLogger());
+        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(),
+            $this->types, $this->currencies, new NullLogger());
 
         $service->cancel($account);
 
@@ -347,8 +347,8 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
             true
         );
 
-        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(
-        ), $this->types, $this->currencies, new NullLogger());
+        $service = new Service($this->getEntityManagerMock(), $this->getGeneratorMock(),
+            $this->types, $this->currencies, new NullLogger());
 
         $service->activate($account);
 

@@ -8,7 +8,7 @@ parameters:
     fnc_account_service.converter.account.class: FNC\Bundle\AccountServiceBundle\Converter\AccountConverter
     fnc_account_service.converter.chain.class: FNC\Bundle\AccountServiceBundle\Converter\ConverterChain
 
-    fnc_account_service.exception_listener.class: FNC\Bundle\AccountServiceBundle\EventListener\ExceptionListener
+    fnc_account_service.event_listener.class: FNC\Bundle\AccountServiceBundle\EventListener\EventListener
 
 services:
 #    fnc_account_service.example:
@@ -48,7 +48,7 @@ services:
             - [@fnc_account_service.converter.history, @fnc_account_service.converter.account]
 
     fnc_account_service.exception_listener:
-        class:        %fnc_account_service.exception_listener.class%
+        class:        %fnc_account_service.event_listener.class%
         arguments:
             - @logger
         tags:

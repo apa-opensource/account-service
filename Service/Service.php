@@ -9,9 +9,9 @@
 namespace FNC\Bundle\AccountServiceBundle\Service;
 
 use Doctrine\ORM\EntityManager;
-use FNC\AccountBundle\Entity\Account;
-use FNC\AccountBundle\Entity\History;
-use FNC\AccountBundle\Generator\Generator;
+use FNC\Bundle\AccountServiceBundle\Entity\Account;
+use FNC\Bundle\AccountServiceBundle\Entity\History;
+use FNC\Bundle\AccountServiceBundle\Generator\Generator;
 
 class Service
 {
