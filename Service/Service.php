@@ -183,31 +183,6 @@ class Service
 
     /**
      * @param Account $account
-     * @param         $type
-     * @param         $pin
-     * @param         $number
-     */
-    public function update(Account $account, $type, $pin, $number)
-    {
-        $repo = $this->em->getRepository('FNCAccountServiceBundle:Account');
-
-        if ($repo->findOneByNumber($number) !== null) {
-            /* Optional Exception - Error Communication - Database Constraint existing */
-            throw new \Exception(sprintf('Number %s already existing', $number), self::ERR_ACCOUNT_ALREADY_EXISTS);
-        }
-
-        $account->setType($type);
-        $account->setPin($pin);
-        $account->setNumber($number);
-
-        $this->em->persist($account);
-        $this->em->flush();
-
-        return $account;
-    }
-
-    /**
-     * @param Account $account
      * @param         $amount
      * @param         $currency
      * @param         $referenceCode

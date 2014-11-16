@@ -64,34 +64,6 @@ class ServiceController extends Controller
      * @param Account $account
      *
      * @return JsonResponse
-     */
-    public function updateAction(Request $request, Account $account)
-    {
-        $type = $request->get('type');
-        $pin = $request->get('pin');
-        $number = $request->get('number');
-
-
-        /* @var Service $service */
-        $service = $this->get('fnc_account.service');
-
-        $account = $service->update($account, $type, $pin, $number);
-
-        return array(
-            'id' => $account->getId(),
-            'number' => $account->getNumber(),
-            'pin' => $account->getPin()
-        );
-
-    }
-
-    /**
-     * Redeem Account.
-     *
-     * @param Request $request
-     * @param Account $account
-     *
-     * @return JsonResponse
      *
      * @ParamConverter("account", class="FNC\Bundle\AccountServiceBundle\Entity\Account")
      */
