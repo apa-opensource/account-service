@@ -18,7 +18,7 @@ class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder()
     {
         $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('fnc_account');
+        $rootNode = $treeBuilder->root('fnc_account_service');
 
         $rootNode
             ->children()

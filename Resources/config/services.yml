@@ -1,54 +1,54 @@
 parameters:
-    fnc_account.paramconverter.account_number_converter.class: FNC\Bundle\AccountServiceBundle\Request\ParamConverter\AccountNumberConverter
+    fnc_account_service.paramconverter.account_number_converter.class: FNC\Bundle\AccountServiceBundle\Request\ParamConverter\AccountNumberConverter
 
-    fnc_account.generator.class: FNC\Bundle\AccountServiceBundle\Generator\Generator
-    fnc_account.service.class: FNC\Bundle\AccountServiceBundle\Service\Service
+    fnc_account_service.generator.class: FNC\Bundle\AccountServiceBundle\Generator\Generator
+    fnc_account_service.service.class: FNC\Bundle\AccountServiceBundle\Service\Service
 
-    fnc_account.converter.history.class: FNC\Bundle\AccountServiceBundle\Converter\HistoryConverter
-    fnc_account.converter.account.class: FNC\Bundle\AccountServiceBundle\Converter\AccountConverter
-    fnc_account.converter.chain.class: FNC\Bundle\AccountServiceBundle\Converter\ConverterChain
+    fnc_account_service.converter.history.class: FNC\Bundle\AccountServiceBundle\Converter\HistoryConverter
+    fnc_account_service.converter.account.class: FNC\Bundle\AccountServiceBundle\Converter\AccountConverter
+    fnc_account_service.converter.chain.class: FNC\Bundle\AccountServiceBundle\Converter\ConverterChain
 
-    fnc_account.exception_listener.class: FNC\Bundle\AccountServiceBundle\EventListener\ExceptionListener
+    fnc_account_service.exception_listener.class: FNC\Bundle\AccountServiceBundle\EventListener\ExceptionListener
 
 services:
-#    fnc_account.example:
+#    fnc_account_service.example:
 #        class: FNC\AccountBundle\Example
 #        arguments: [@service_id, "plain_value", %parameter%]
-    fnc_account.account_number_converter:
-        class:        %fnc_account.paramconverter.account_number_converter.class%
+    fnc_account_service.account_number_converter:
+        class:        %fnc_account_service.paramconverter.account_number_converter.class%
         arguments:    [ @doctrine.orm.default_entity_manager]
         tags:
             - { name: request.param_converter, priority: 100, converter: account_number_connverter }
 
-    fnc_account.account_number_generator:
-        class:        %fnc_account.generator.class%
+    fnc_account_service.account_number_generator:
+        class:        %fnc_account_service.generator.class%
 
-    fnc_account.service:
-        class:        %fnc_account.service.class%
+    fnc_account_service.service:
+        class:        %fnc_account_service.service.class%
         arguments:
             - @doctrine.orm.default_entity_manager
-            - @fnc_account.account_number_generator
-            - %fnc_account.types%
-            - %fnc_account.currencies%
+            - @fnc_account_service.account_number_generator
+            - %fnc_account_service.types%
+            - %fnc_account_service.currencies%
             - @logger
         tags:
             - { name: monolog.logger, channel: account }
 
-    fnc_account.converter.history:
-        class:        %fnc_account.converter.history.class%
+    fnc_account_service.converter.history:
+        class:        %fnc_account_service.converter.history.class%
         public:       false
 
-    fnc_account.converter.account:
-        class:        %fnc_account.converter.account.class%
+    fnc_account_service.converter.account:
+        class:        %fnc_account_service.converter.account.class%
         public:       false
 
-    fnc_account.converter_chain:
-        class:        %fnc_account.converter.chain.class%
+    fnc_account_service.converter_chain:
+        class:        %fnc_account_service.converter.chain.class%
         arguments:
-            - [@fnc_account.converter.history, @fnc_account.converter.account]
+            - [@fnc_account_service.converter.history, @fnc_account_service.converter.account]
 
-    fnc_account.exception_listener:
-        class:        %fnc_account.exception_listener.class%
+    fnc_account_service.exception_listener:
+        class:        %fnc_account_service.exception_listener.class%
         arguments:
             - @logger
         tags:

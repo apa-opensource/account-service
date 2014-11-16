@@ -22,8 +22,8 @@ class FNCAccountServiceExtension extends Extension
         $configuration = new Configuration();
         $config = $this->processConfiguration($configuration, $configs);
 
-        $container->setParameter('fnc_account.types', $config['types']);
-        $container->setParameter('fnc_account.currencies', $config['currencies']);
+        $container->setParameter('fnc_account_service.types', $config['types']);
+        $container->setParameter('fnc_account_service.currencies', $config['currencies']);
 
         $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
